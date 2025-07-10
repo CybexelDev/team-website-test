@@ -32,4 +32,6 @@ export const teamMembers = [
     experience: "2 Years",
     image: demo4,
   },
+  
+  
 ];

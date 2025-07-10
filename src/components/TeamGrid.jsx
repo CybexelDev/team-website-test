@@ -1,28 +1,32 @@
-// src/components/TeamGrid.jsx
-import { motion } from "framer-motion";
+import React from "react";
 import { teamMembers } from "../data/team";
 
-export default function TeamGrid() {
+export default function TeamGrid({ activeIndex, setActiveIndex }) {
   return (
-    <section className="py-12 bg-gradient-to-br from-blue-900 via-purple-900 to-black text-white w-full">
-      <div className="flex overflow-x-auto gap-6 px-4 scrollbar-hide">
-        {teamMembers.map(m => (
-          <motion.div
-            key={m.id}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="min-w-[180px] bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 text-center hover:bg-white/10 transition-all duration-300"
-          >
-            <img
-              src={m.image}
-              alt={m.name}
-              className="w-20 h-20 mx-auto rounded-full object-cover border-2 border-white mb-3 shadow"
-            />
-            <h4 className="text-lg font-medium text-white">{m.name}</h4>
-            <p className="text-sm text-gray-400">{m.position}</p>
-          </motion.div>
-        ))}
-      </div>
-    </section>
+    <ul className="space-y-4 ">
+      {teamMembers.map((member, idx) => (
+        <li
+          key={member.id}
+          onClick={() => setActiveIndex(idx)}
+          className={`flex items-center gap-4 cursor-pointer p-3 rounded-xl transition-all duration-300
+            ${
+              activeIndex === idx
+                ? "bg-white/20 scale-[1.02]"
+                : "bg-white/10 hover:bg-white/20"
+            }`}
+        >
+          <img
+            src={member.image}
+            alt={member.name}
+            className="w-16 h-16 rounded-full object-cover shadow-lg border-2 border-white"
+          />
+          <div>
+            <h3 className="text-lg font-semibold">{member.name}</h3>
+            <p className="text-sm text-gray-300">{member.position}</p>
+            <p className="text-xs text-gray-400">Experience: {member.experience}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }

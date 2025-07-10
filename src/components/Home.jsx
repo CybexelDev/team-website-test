@@ -7,8 +7,8 @@ function Home() {
 
   return (
     <motion.section
-      className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-black 
-      text-white flex items-center justify-center px-4"
+     className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-black 
+  text-white flex items-center justify-center px-4 pl-16 md:pl-20"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}

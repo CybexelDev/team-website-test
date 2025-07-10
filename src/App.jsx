@@ -38,7 +38,7 @@ function App() {
       <Navbar />
 
       {/* Add left margin to content to account for sidebar width */}
-      <div className="ml-16 md:ml-20">
+      <div className="">
         <AnimatedRoutes />
       </div>
     </Router>
