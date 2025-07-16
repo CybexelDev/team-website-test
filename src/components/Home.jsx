@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import AnimatedParagraph from "./AnimatedParagraph";
+import { FiMail } from 'react-icons/fi';
 
 function Home() {
-  const navigate = useNavigate();
 
   return (
     <motion.section
+     id="home"
      className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-black 
-  text-white flex items-center justify-center px-4 pl-16 md:pl-20"
+  text-white flex items-center justify-center px-4 pl-16 md:pl-20 h-screen snap-start"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
@@ -38,7 +39,7 @@ function Home() {
           className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 
           text-white font-semibold py-3 px-6 rounded-full shadow-lg transition"
         >
-          Let's Connect
+          Let's Connect <FiMail className="inline ml-2" />
         </motion.a>
       </motion.div>
     </motion.section>

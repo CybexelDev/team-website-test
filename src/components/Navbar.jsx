@@ -1,20 +1,26 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiHome, FiUser, FiBriefcase, FiCode, FiMail } from "react-icons/fi";
-import logo from "../assets/bgfixed.png";
+import logo from "../assets/logo.png"; // Replace with your logo
 
-function Navbar() {
+function Navbar({ activeItem, setActiveItem }) {
   const [hovered, setHovered] = useState(null);
-  const location = useLocation();
 
   const menuItems = [
-    { label: "Home", href: "/", icon: <FiHome /> },
-    { label: "Services", href: "/services", icon: <FiBriefcase /> },
-    { label: "Projects", href: "/projects", icon: <FiCode /> },
-    { label: "Team", href: "/team", icon: <FiUser /> },
-    { label: "Contact", href: "/contact", icon: <FiMail /> },
+    { label: "Home", id: "home", icon: <FiHome /> },
+    { label: "Services", id: "services", icon: <FiBriefcase /> },
+    { label: "Projects", id: "projects", icon: <FiCode /> },
+    { label: "Team", id: "team", icon: <FiUser /> },
+    { label: "Contact", id: "contact", icon: <FiMail /> },
   ];
+
+  const scrollToSection = (id, index) => {
+    setActiveItem(index);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <nav
@@ -35,19 +41,19 @@ function Navbar() {
       {/* Menu Items */}
       <div className="flex flex-col items-center gap-6 mt-4 flex-grow justify-center">
         {menuItems.map((item, index) => (
-          <Link
+          <div
             key={index}
-            to={item.href}
             className="relative group"
             onMouseEnter={() => setHovered(index)}
             onMouseLeave={() => setHovered(null)}
+            onClick={() => scrollToSection(item.id, index)}
           >
             <motion.div
               whileHover={{ scale: 1.15 }}
               className={`w-10 h-10 flex items-center justify-center rounded-full 
-                transition-all duration-300
+                transition-all duration-300 cursor-pointer
                 ${
-                  location.pathname === item.href
+                  activeItem === index
                     ? "bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 text-white shadow-lg"
                     : "bg-white/10 text-gray-300 hover:bg-gradient-to-br hover:from-blue-500 hover:via-purple-500 hover:to-indigo-500 hover:text-white"
                 }`}
@@ -55,7 +61,7 @@ function Navbar() {
               {item.icon}
             </motion.div>
 
-            {/* Hover Label (optional) */}
+            {/* Hover Label */}
             <AnimatePresence>
               {hovered === index && (
                 <motion.div
@@ -71,12 +77,11 @@ function Navbar() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </Link>
+          </div>
         ))}
       </div>
 
-      {/* Spacer or Footer Item if needed */}
-      <div className="h-8" /> {/* Optional spacer */}
+      <div className="h-8" />
     </nav>
   );
 }

@@ -3,7 +3,9 @@ import React from "react";
 
 export default function Contact() {
   return (
-    <div className="min-h-screen w-full pt-24 pl-24 bg-gradient-to-br from-blue-900 via-purple-900 to-black text-white px-6 py-10">
+    <div 
+      id="contact" 
+      className="h-screen snap-start min-h-screen w-full pt-24 pl-24 bg-gradient-to-br z-10 from-blue-900 via-purple-900 to-black text-white px-6 py-10">
       <h1 className="text-4xl font-bold text-center mb-10">Contact Us</h1>
 
       <div className="flex flex-col md:flex-row gap-6">

@@ -1,5 +1,6 @@
 // src/components/Projects.jsx
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
 import webdev from "../assets/webdev.jpg";
 
 const projects = [
@@ -24,65 +25,98 @@ const projects = [
     image: webdev,
   },
   {
-    title: "Neo Commerce",
-    description: "A futuristic e-commerce store built with AI & VR preview.",
+    title: "Neo CMS",
+    description: "Headless CMS powered by GraphQL and 3D previews.",
     image: webdev,
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 60 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.2, duration: 0.8, ease: "easeOut" },
-  }),
-};
 
 export default function Projects() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const intervalRef = useRef(null);
+
+  const startAutoRotate = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % projects.length);
+    }, 3000);
+  };
+  
+    useEffect(() => {
+      startAutoRotate();
+      return () => clearInterval(intervalRef.current);
+    }, []);
+  
+    const handleManualSelect = (index) => {
+      setActiveIndex(index);
+      startAutoRotate();
+    };
   return (
-    <section className="min-h-screen px-6 py-20 bg-gradient-to-br from-blue-900 via-purple-900 to-black text-white">
-      <div className="max-w-7xl mx-auto">
-        <motion.h2
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl md:text-5xl font-bold text-center mb-12 text-white"
-        >
-          Featured Works
-        </motion.h2>
+    <motion.section
+      id="projects"
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -60 }}
+      transition={{ duration: 0.8 }}
+      className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-900 via-purple-900 to-black h-screen snap-start text-white"
+    >
+      {/* Left: carousel display */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white/10 backdrop-blur-md p-6 rounded-2xl max-w-xl text-center shadow-xl border border-white/10"
+          >
+            <img
+              src={projects[activeIndex].image}
+              alt={projects[activeIndex].title}
+              className="w-full h-48 object-cover rounded-xl mb-4 shadow-md border border-white/10"
+            />
+            <h2 className="text-3xl font-bold text-blue-400 mb-2">
+              {projects[activeIndex].title}
+            </h2>
+            <p className="text-lg text-gray-200">
+              {projects[activeIndex].description}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              className="relative group rounded-xl overflow-hidden shadow-lg cursor-pointer"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              custom={index}
-              variants={cardVariants}
-            >
-              <div className="overflow-hidden rounded-xl">
-                <motion.img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-
-              <motion.div
-                className="absolute inset-0 bg-black/50 backdrop-blur-md opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6"
-              >
-                <h3 className="text-2xl font-bold text-blue-400 mb-2">
-                  {project.title}
-                </h3>
-                <p className="text-sm text-gray-200">{project.description}</p>
-              </motion.div>
+      {/* Right: scrollable service list */}
+      <div className="w-full md:w-1/4 p-4 flex items-center justify-center">
+        <div className="relative h-[400px] w-full overflow- group">
+          <div
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="overflow-y-auto max-h-[400px] pr-2 group-hover:overflow-scroll 
+              scroll-smooth scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-transparent"
+          >
+            <motion.div className="space-y-3">
+              {projects.map((service, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => handleManualSelect(index)}
+                  className={`p-4 rounded-xl transition-all duration-300 shadow-md cursor-pointer ${
+                    index === activeIndex
+                      ? "bg-white/20 text-white border border-white/20"
+                      : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  <h3 className="text-md font-semibold">{service.title}</h3>
+                  <p className="text-sm mt-1 line-clamp-2 text-gray-300">
+                    {service.description.slice(0, 60)}...
+                  </p>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
+          </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

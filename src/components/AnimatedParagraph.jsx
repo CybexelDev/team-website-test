@@ -29,7 +29,7 @@ const AnimatedParagraph = () => {
   }, [wordIndex, isDeleting]);
 
   return (
-    <p className="text-xl md:text-xl text-red-500   drop-shadow-[0_0_20px_rgba(252,211,77,0.8)] mb-8 
+    <p className="text-xl md:text-xl text-red-500   drop-shadow-[0_0_20px_rgba(252,211,77,0.9)] mb-8 
      rounded px-4 py-2 ">
   {displayedWords.join(" ")}
   <span className="animate-pulse"></span>

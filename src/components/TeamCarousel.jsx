@@ -6,28 +6,57 @@ export default function TeamCarousel({ activeIndex, setActiveIndex }) {
   const [isScrolling, setIsScrolling] = useState(false);
   const sectionRef = useRef(null);
 
+  const isAtFirst = activeIndex === 0;
+  const isAtLast = activeIndex === teamMembers.length - 1;
+
+  useEffect(() => {
+    if (!isAtFirst && !isAtLast) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [activeIndex]);
+
+  const scrollToNextPage = () => {
+    const next = sectionRef.current?.nextElementSibling;
+    if (next) next.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToPreviousPage = () => {
+    const prev = sectionRef.current?.previousElementSibling;
+    if (prev) prev.scrollIntoView({ behavior: "smooth" });
+  };
+
   const handleScroll = (e) => {
     if (isScrolling) return;
     const delta = e.deltaY;
 
-    if (delta > 0 && activeIndex < teamMembers.length - 1) {
-      setIsScrolling(true);
-      setActiveIndex((prev) => prev + 1);
-    } else if (delta < 0 && activeIndex > 0) {
-      setIsScrolling(true);
-      setActiveIndex((prev) => prev - 1);
+    if (delta > 0) {
+      if (!isAtLast) {
+        e.preventDefault();
+        setIsScrolling(true);
+        setActiveIndex((prev) => prev + 1);
+      } else {
+        scrollToNextPage();
+      }
+    } else if (delta < 0) {
+      if (!isAtFirst) {
+        e.preventDefault();
+        setIsScrolling(true);
+        setActiveIndex((prev) => prev - 1);
+      } else {
+        scrollToPreviousPage();
+      }
     }
   };
 
   useEffect(() => {
     const ref = sectionRef.current;
     if (!ref) return;
-
-    const wheelHandler = (e) => {
-      e.preventDefault();
-      handleScroll(e);
-    };
-
+    const wheelHandler = (e) => handleScroll(e);
     ref.addEventListener("wheel", wheelHandler, { passive: false });
     return () => ref.removeEventListener("wheel", wheelHandler);
   }, [activeIndex, isScrolling]);
