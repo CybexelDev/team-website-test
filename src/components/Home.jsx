@@ -15,9 +15,9 @@ function Home() {
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 1, ease: "easeOut" }}
     >
-      <motion.div className="text-center max-w-2xl bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-xl">
+      <motion.div className="text-center max-w-2xl bg-white/10  backdrop-blur-lg p-10 rounded-2xl shadow-xl">
         <motion.h1
-          className="text-5xl md:text-6xl font-extrabold leading-tight mb-6"
+          className="text-5xl md:text-6xl font-extrabold text-purple-400 leading-tight mb-6"
           whileHover={{ scale: 1.1, y: -10 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
@@ -35,7 +35,7 @@ function Home() {
         <motion.a
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          href="mailto:yahyatp.cybexel@gmail.com"
+          href="mailto:developerscbe.cybexel@gmail.com"
           className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 
           text-white font-semibold py-3 px-6 rounded-full shadow-lg transition"
         >

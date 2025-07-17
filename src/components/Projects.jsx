@@ -1,33 +1,37 @@
 // src/components/Projects.jsx
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import webdev from "../assets/webdev.jpg";
+import cyberanalytics from "../assets/projects/cyberanalytics.jpg";
+import ecodrive from "../assets/projects/ecodrive.jpg";
+import neocms from "../assets/projects/neocms.jpg";
+import neocommerce from "../assets/projects/neocommerce.jpg";
+import virtualportfolio from "../assets/projects/virtualportfolio.webp";
 
 const projects = [
   {
     title: "Cyber Analytics",
     description: "Next-gen analytics platform with real-time data rendering.",
-    image: webdev,
+    image: cyberanalytics,
   },
   {
     title: "Neo Commerce",
     description: "A futuristic e-commerce store built with AI & VR preview.",
-    image: webdev,
+    image: neocommerce,
   },
   {
     title: "Virtual Portfolio",
     description: "Interactive 3D portfolio with parallax and physics scroll.",
-    image: webdev,
+    image: virtualportfolio,
   },
   {
     title: "EcoDrive App",
     description: "Sustainable driving tracker for electric vehicles.",
-    image: webdev,
+    image: ecodrive,
   },
   {
     title: "Neo CMS",
     description: "Headless CMS powered by GraphQL and 3D previews.",
-    image: webdev,
+    image: neocms,
   },
 ];
 
@@ -66,9 +70,9 @@ export default function Projects() {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
+            initial={{ opacity: 0, x: -100, scale:0.9 }}
+            animate={{ opacity: 1, x: 0, scale:1 }}
+            exit={{ opacity: 0, x: 100, scale:0.9 }}
             transition={{ duration: 0.5 }}
             className="bg-white/10 backdrop-blur-md p-6 rounded-2xl max-w-xl text-center shadow-xl border border-white/10"
           >
@@ -89,7 +93,7 @@ export default function Projects() {
 
       {/* Right: scrollable service list */}
       <div className="w-full md:w-1/4 p-4 flex items-center justify-center">
-        <div className="relative h-[400px] w-full overflow- group">
+        <div className="relative h-[400px] w-full overflow-hidden group">
           <div
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             className="overflow-y-auto max-h-[400px] pr-2 group-hover:overflow-scroll 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiHome, FiUser, FiBriefcase, FiCode, FiMail } from "react-icons/fi";
+import { FiHome, FiUser, FiBriefcase, FiCode, FiMail,  } from "react-icons/fi";
 import logo from "../assets/logo.png"; // Replace with your logo
 
 function Navbar({ activeItem, setActiveItem }) {

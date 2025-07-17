@@ -65,7 +65,7 @@ export default function Team({ isActive, setIsScrollLocked }) {
       className="sticky top-0 w-screen min-h-screen flex flex-col lg:flex-row bg-gradient-to-tr from-blue-900 via-purple-900 to-black p-8"
     >
       {/* LEFT: Animated Card */}
-      <div className="flex-[3] flex justify-center items-center px-10">
+      <div className="flex-[3] flex justify-center  items-center px-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
@@ -73,7 +73,7 @@ export default function Team({ isActive, setIsScrollLocked }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.4 }}
-            className="w-full max-w-xl bg-white/10 p-7 rounded-2xl shadow-xl backdrop-blur-md flex gap-6"
+            className="w-full max-w-xl bg-white/10 bg-gradient-to-tr from-blue-700 via-purple-700 to-black p-7 rounded-2xl shadow-xl backdrop-blur-md flex gap-6"
           >
             <div className="w-1/2">
               <img
