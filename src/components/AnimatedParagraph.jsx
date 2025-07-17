@@ -30,7 +30,8 @@ const AnimatedParagraph = () => {
 
   return (
     <p className="text-xl md:text-xl text-white   drop-shadow-[0_0_20px_rgba(252,211,77,0.9)] mb-8 
-     rounded px-4 py-2 ">
+     rounded px-4 py-2 "
+     style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1)' }}>
   {displayedWords.join(" ")}
   <span className="animate-pulse"></span>
 </p>

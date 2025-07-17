@@ -18,6 +18,7 @@ function Home() {
       <motion.div className="text-center max-w-2xl bg-white/10  backdrop-blur-lg p-10 rounded-2xl shadow-xl">
         <motion.h1
           className="text-5xl md:text-6xl font-extrabold text-purple-400 leading-tight mb-6"
+          style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1)' }}
           whileHover={{ scale: 1.1, y: -10 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
