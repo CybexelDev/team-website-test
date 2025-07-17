@@ -23,7 +23,7 @@ const AnimatedParagraph = () => {
           setIsDeleting(false);
         }
       }
-    }, 400); // Change speed here
+    }, 500); // Change speed here
 
     return () => clearInterval(interval);
   }, [wordIndex, isDeleting]);
@@ -33,7 +33,7 @@ const AnimatedParagraph = () => {
      rounded px-4 py-2 "
      style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1)' }}>
   {displayedWords.join(" ")}
-  <span className="animate-pulse"></span>
+  <span className="animate-pulse text-white/0"> |</span>
 </p>
   );
 };

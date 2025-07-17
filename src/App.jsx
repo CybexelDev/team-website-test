@@ -26,7 +26,7 @@ function App() {
           }
         }
       },
-      { threshold: 0.6 }
+      { threshold: 1 }
     );
 
     sectionRefs.current.forEach((section) => {
@@ -42,11 +42,10 @@ function App() {
 
   return (
     <div
-      id="app"
-      className={`relative h-screen snap-y snap-mandatory scroll-smooth ${
-        isScrollLocked ? "overflow-hidden" : "overflow-y-scroll"
-      }`}
-    >
+    className={`relative h-screen scroll-smooth scrollbar-hide ${
+  isScrollLocked ? "overflow-hidden" : "overflow-y-scroll"
+} md:snap-y md:snap-mandatory`} >
+
       <Navbar activeItem={activeItem} setActiveItem={setActiveItem} />
 
       {sectionIds.map((id, index) => (
@@ -54,7 +53,7 @@ function App() {
           key={id}
           id={id}
           ref={(el) => (sectionRefs.current[index] = el)}
-          className="h-screen w-full snap-start"
+          className="min-h-screen md:h-screen w-full snap-start"
         >
           {{
             home: <Home />,

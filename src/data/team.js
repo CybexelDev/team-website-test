@@ -6,14 +6,14 @@ import demo4 from "../assets/team/demo4.webp";
 export const teamMembers = [
   {
     id: 1,
-    name: "demo1",
+    name: "Team 1",
     position: "Fullstack Developer",
     experience: "2 Years",
     image: demo1,
   },
   {
     id: 2,
-    name: "demo 2",
+    name: "Demo 2",
     position: "Frontend Developer",
     experience: "1.5 Years",
     image: demo2,

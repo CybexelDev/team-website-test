@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
-import { teamMembers } from "../data/team";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { teamMembers } from "../data/team"; // your team data file
 
 export default function Team({ isActive, setIsScrollLocked }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeIndexRef = useRef(activeIndex); // <- new
+  const activeIndexRef = useRef(activeIndex);
   const isScrolling = useRef(false);
   const total = teamMembers.length;
 
@@ -28,11 +28,11 @@ export default function Team({ isActive, setIsScrollLocked }) {
       if (Math.abs(e.deltaY) < SCROLL_THRESHOLD) return;
 
       if ((isAtFirst && scrollUp) || (isAtLast && scrollDown)) {
-        setIsScrollLocked(false); // allow page scroll
+        setIsScrollLocked(false);
         return;
       }
 
-      e.preventDefault(); // block outer scroll
+      e.preventDefault();
       setIsScrollLocked(true);
 
       if (isScrolling.current) return;
@@ -53,7 +53,7 @@ export default function Team({ isActive, setIsScrollLocked }) {
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
-      setIsScrollLocked(false); // cleanup
+      setIsScrollLocked(false);
     };
   }, [isActive, setIsScrollLocked]);
 
@@ -62,10 +62,10 @@ export default function Team({ isActive, setIsScrollLocked }) {
   return (
     <section
       id="team"
-      className="sticky top-0 w-screen min-h-screen flex flex-col lg:flex-row bg-gradient-to-tr from-blue-900 via-purple-900 to-black p-8"
+      className="w-full min-h-screen bg-gradient-to-tr from-blue-900 via-purple-900 to-black p-4 lg:p-8 flex flex-col lg:flex-row overflow-hidden relative z-10"
     >
-      {/* LEFT: Animated Card */}
-      <div className="flex-[3] flex justify-center  items-center px-10">
+      {/* LEFT: Active Card */}
+      <div className="flex-[3] w-full flex justify-center items-center px-4 mb-8 lg:mb-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
@@ -73,16 +73,16 @@ export default function Team({ isActive, setIsScrollLocked }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.4 }}
-            className="w-full max-w-xl bg-white/10 bg-gradient-to-tr from-blue-700 via-purple-700 to-black p-7 rounded-2xl shadow-xl backdrop-blur-md flex gap-6"
+            className="w-full max-w-xl bg-white/10 bg-gradient-to-tr from-blue-700 via-purple-700 to-black p-6 rounded-2xl shadow-xl backdrop-blur-md flex flex-col sm:flex-row gap-6"
           >
-            <div className="w-1/2">
+            <div className="sm:w-1/2 w-full">
               <img
                 src={current.image}
                 alt={current.name}
                 className="w-full h-full object-cover rounded-xl"
               />
             </div>
-            <div className="w-1/2 flex flex-col justify-center space-y-2 text-white">
+            <div className="sm:w-1/2 w-full flex flex-col justify-center space-y-2 text-white">
               <h2 className="text-2xl font-bold">{current.name}</h2>
               <h3 className="text-lg text-purple-300">{current.position}</h3>
               <p className="text-sm text-gray-200">
@@ -93,10 +93,10 @@ export default function Team({ isActive, setIsScrollLocked }) {
         </AnimatePresence>
       </div>
 
-      {/* RIGHT: List */}
-      <div className="flex-1 flex items-center justify-center p-4">
-        <div className="relative h-[400px] w-full max-w-sm">
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+      {/* RIGHT: Selectable List */}
+      <div className="flex-1 w-full flex items-center justify-center p-4">
+        <div className="relative w-full max-w-md max-h-[400px] overflow-y-auto scrollbar-hide">
+          <div className="flex flex-col items-center justify-center gap-4">
             {teamMembers.map((member, idx) => (
               <div
                 key={member.id}

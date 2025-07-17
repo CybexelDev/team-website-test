@@ -63,7 +63,7 @@ export default function Projects() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -60 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-900 via-purple-900 to-black h-screen snap-start text-white"
+      className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-900 via-purple-900 to-black md:h-screen md:snap-start text-white"
     >
       {/* Left: carousel display */}
       <div className="flex-1 flex items-center justify-center p-8">

@@ -54,7 +54,7 @@ function Navbar({ activeItem, setActiveItem }) {
                 transition-all duration-300 cursor-pointer
                 ${
                   activeItem === index
-                    ? "bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 text-white shadow-lg"
+                    ? "md:bg-gradient-to-br bg-white/10 from-purple-500 via-indigo-500 to-blue-500 text-white shadow-lg"
                     : "bg-white/10 text-gray-300 hover:bg-gradient-to-br hover:from-blue-500 hover:via-purple-500 hover:to-indigo-500 hover:text-white"
                 }`}
             >
