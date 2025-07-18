@@ -1,5 +1,4 @@
-// src/components/Projects.jsx
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import cyberanalytics from "../assets/projects/cyberanalytics.jpg";
 import ecodrive from "../assets/projects/ecodrive.jpg";
@@ -35,27 +34,27 @@ const projects = [
   },
 ];
 
-
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef(null);
 
   const startAutoRotate = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % projects.length);
     }, 3000);
   };
-  
-    useEffect(() => {
-      startAutoRotate();
-      return () => clearInterval(intervalRef.current);
-    }, []);
-  
-    const handleManualSelect = (index) => {
-      setActiveIndex(index);
-      startAutoRotate();
-    };
+
+  useEffect(() => {
+    startAutoRotate();
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
+  const handleManualSelect = (index) => {
+    setActiveIndex(index);
+    startAutoRotate();
+  };
+
   return (
     <motion.section
       id="projects"
@@ -63,61 +62,88 @@ export default function Projects() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -60 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-900 via-purple-900 to-black md:h-screen md:snap-start text-white"
+      className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-black text-white"
     >
-      {/* Left: carousel display */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeIndex}
-            initial={{ opacity: 0, x: -100, scale:0.9 }}
-            animate={{ opacity: 1, x: 0, scale:1 }}
-            exit={{ opacity: 0, x: 100, scale:0.9 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white/10 backdrop-blur-md p-6 rounded-2xl max-w-xl text-center shadow-xl border border-white/10"
-          >
-            <img
-              src={projects[activeIndex].image}
-              alt={projects[activeIndex].title}
-              className="w-full h-48 object-cover rounded-xl mb-4 shadow-md border border-white/10"
-            />
-            <h2 className="text-3xl font-bold text-blue-400 mb-2">
-              {projects[activeIndex].title}
-            </h2>
-            <p className="text-lg text-gray-200">
-              {projects[activeIndex].description}
-            </p>
-          </motion.div>
-        </AnimatePresence>
+      {/* Small screen layout */}
+      <div className="md:hidden w-full h-screen pt-[10px] px-[10px] box-border flex flex-col justify-start">
+        {/* Top Carousel Card */}
+        <div className="w-full h-[66vh] bg-white/10 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-white/10 mb-3">
+          <img
+            src={projects[activeIndex].image}
+            alt={projects[activeIndex].title}
+            className="w-full h-[200px] object-cover rounded-xl mb-3 shadow-md border border-white/10"
+          />
+          <h2 className="text-xl font-bold text-blue-400 mb-1">
+            {projects[activeIndex].title}
+          </h2>
+          <p className="text-sm text-gray-200">{projects[activeIndex].description}</p>
+        </div>
+
+        {/* Scrollable image list */}
+        <div className="w-full -mt-[5px] px-[5px] pt-10 flex overflow-x-auto gap-3 scrollbar-hide pb-[7%]">
+          {projects.map((project, index) => (
+            <div
+              key={index}
+              onClick={() => handleManualSelect(index)}
+              className={`flex-shrink-0 w-[70px] h-[60px] rounded-xl cursor-pointer overflow-hidden border transition-transform duration-300
+                ${index === activeIndex ? "border-blue-400 scale-105" : "border-white/20"}`}
+            >
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Right: scrollable service list */}
-      <div className="w-full md:w-1/4 p-4 flex items-center justify-center">
-        <div className="relative h-[400px] w-full overflow-hidden group">
-          <div
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            className="overflow-y-auto max-h-[400px] pr-2 group-hover:overflow-scroll 
-              scroll-smooth scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-transparent"
-          >
-            <motion.div className="space-y-3">
-              {projects.map((service, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.02 }}
-                  onClick={() => handleManualSelect(index)}
-                  className={`p-4 rounded-xl transition-all duration-300 shadow-md cursor-pointer ${
-                    index === activeIndex
-                      ? "bg-white/20 text-white border border-white/20"
-                      : "bg-white/10 text-white hover:bg-white/20"
-                  }`}
-                >
-                  <h3 className="text-md font-semibold">{service.title}</h3>
-                  <p className="text-sm mt-1 line-clamp-2 text-gray-300">
-                    {service.description.slice(0, 60)}...
-                  </p>
-                </motion.div>
-              ))}
+      {/* Medium and Large screen layout */}
+      <div className="hidden md:flex flex-row w-full min-h-screen pt-5">
+        {/* Carousel section */}
+        <div className="w-full md:flex-1 p-4 flex items-center justify-center md:min-w-[600px] md:h-auto md:min-h-[500px]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-white/10 w-full max-w-lg text-center h-[66vh]"
+            >
+              <img
+                src={projects[activeIndex].image}
+                alt={projects[activeIndex].title}
+                className="w-full h-[240px] object-cover rounded-xl mb-4 shadow-md border border-white/10"
+              />
+              <h2 className="text-2xl font-bold text-blue-400 mb-2">
+                {projects[activeIndex].title}
+              </h2>
+              <p className="text-base text-gray-200">{projects[activeIndex].description}</p>
             </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Scrollable list */}
+        <div className="hidden md:flex w-1/4 items-center justify-center md:p-6">
+          <div className="w-full h-[400px] overflow-y-auto scrollbar-hide px-2">
+            <div className="flex flex-col gap-3">
+              {projects.map((project, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleManualSelect(index)}
+                  className={`cursor-pointer flex items-start gap-4 p-4 rounded-xl w-full transition-all duration-300 min-h-[100px]
+                    ${index === activeIndex
+                      ? "bg-white/20 border border-white/30 scale-[1.02] shadow-md"
+                      : "bg-white/10 hover:bg-white/20"}`}
+                >
+                  <div className="flex flex-col">
+                    <h3 className="text-md font-semibold">{project.title}</h3>
+                    <p className="text-sm text-gray-300">{project.description.slice(0, 50)}...</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

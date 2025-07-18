@@ -1,132 +1,118 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { teamMembers } from "../data/team"; // your team data file
+import { teamMembers } from "../data/team";
 
-export default function Team({ isActive, setIsScrollLocked }) {
+export default function Team() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeIndexRef = useRef(activeIndex);
-  const isScrolling = useRef(false);
+  const intervalRef = useRef(null);
   const total = teamMembers.length;
 
-  useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
+  const startAutoRotate = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % total);
+    }, 3000);
+  };
 
   useEffect(() => {
-    if (!isActive) return;
+    startAutoRotate();
+    return () => clearInterval(intervalRef.current);
+  }, []);
 
-    const SCROLL_THRESHOLD = 20;
-    const SCROLL_DELAY = 700;
-
-    const handleWheel = (e) => {
-      const currentIndex = activeIndexRef.current;
-      const scrollUp = e.deltaY < 0;
-      const scrollDown = e.deltaY > 0;
-      const isAtFirst = currentIndex === 0;
-      const isAtLast = currentIndex === total - 1;
-
-      if (Math.abs(e.deltaY) < SCROLL_THRESHOLD) return;
-
-      if ((isAtFirst && scrollUp) || (isAtLast && scrollDown)) {
-        setIsScrollLocked(false);
-        return;
-      }
-
-      e.preventDefault();
-      setIsScrollLocked(true);
-
-      if (isScrolling.current) return;
-      isScrolling.current = true;
-
-      setActiveIndex((prev) => {
-        if (scrollDown) return Math.min(prev + 1, total - 1);
-        if (scrollUp) return Math.max(prev - 1, 0);
-        return prev;
-      });
-
-      setTimeout(() => {
-        isScrolling.current = false;
-      }, SCROLL_DELAY);
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      setIsScrollLocked(false);
-    };
-  }, [isActive, setIsScrollLocked]);
+  const handleManualSelect = (index) => {
+    setActiveIndex(index);
+    startAutoRotate();
+  };
 
   const current = teamMembers[activeIndex];
 
   return (
-    <section
+    <motion.section
       id="team"
-      className="w-full min-h-screen bg-gradient-to-tr from-blue-900 via-purple-900 to-black p-4 lg:p-8 flex flex-col lg:flex-row overflow-hidden relative z-10"
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -60 }}
+      transition={{ duration: 0.8 }}
+      className="w-screen h-screen bg-gradient-to-tr from-blue-900 via-purple-900 to-black text-white flex px-5 md:px-10 md:py-10 py-5 pb-20  box-border"
     >
-      {/* LEFT: Active Card */}
-      <div className="flex-[3] w-full flex justify-center items-center px-4 mb-8 lg:mb-0">
+      {/* LEFT: Main Card */}
+      <div className="flex-1 h-full flex items-center md:p-20  justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.4 }}
-            className="w-full max-w-xl bg-white/10 bg-gradient-to-tr from-blue-700 via-purple-700 to-black p-6 rounded-2xl shadow-xl backdrop-blur-md flex flex-col sm:flex-row gap-6"
+            initial={{ opacity: 0, x: 100, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -100, scale: 0.95 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white/10 backdrop-blur-md p-6 rounded-2xl w-full max-w-4xl h-full flex flex-col md:flex-row gap-6 border border-white/10 shadow-xl"
           >
-            <div className="sm:w-1/2 w-full">
+            {/* Image */}
+            <div className="w-full md:w-1/2 h-1/2 md:h-full">
               <img
                 src={current.image}
                 alt={current.name}
                 className="w-full h-full object-cover rounded-xl"
               />
             </div>
-            <div className="sm:w-1/2 w-full flex flex-col justify-center space-y-2 text-white">
-              <h2 className="text-2xl font-bold">{current.name}</h2>
+
+            {/* Text */}
+            <div className="w-full md:w-1/2 flex flex-col justify-center space-y-3 text-white">
+              <h2 className="text-3xl font-bold">{current.name}</h2>
               <h3 className="text-lg text-purple-300">{current.position}</h3>
               <p className="text-sm text-gray-200">
                 Experience: {current.experience}
+              </p>
+              <p className="text-sm text-gray-300">
+                {current.bio || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut."}
               </p>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* RIGHT: Selectable List */}
-      <div className="flex-1 w-full flex items-center justify-center p-4">
-        <div className="relative w-full max-w-md max-h-[400px] overflow-y-auto scrollbar-hide">
-          <div className="flex flex-col items-center justify-center gap-4">
-            {teamMembers.map((member, idx) => (
-              <div
-                key={member.id}
-                onClick={() => setActiveIndex(idx)}
-                className={`w-full p-4 rounded-xl cursor-pointer transition-all duration-300 transform
-                  ${
-                    activeIndex === idx
-                      ? "bg-white/20 scale-105 z-10"
-                      : "bg-white/10 hover:bg-white/20 scale-95 opacity-50"
-                  }`}
-              >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
-                  />
-                  <div className="text-white">
-                    <h3 className="text-lg font-semibold">{member.name}</h3>
-                    <p className="text-sm text-purple-300">{member.position}</p>
-                    <p className="text-xs text-gray-400">
-                      Experience: {member.experience}
-                    </p>
-                  </div>
-                </div>
+      {/* RIGHT: Sticky Vertical List */}
+      <div className="w-[80px] sm:w-[60px] md:w-[280px] h-full overflow-y-auto flex flex-col items-center py-24 gap-4  md:pr-2 z-10">
+        {teamMembers.map((member, idx) => (
+          <motion.div
+            key={idx}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => handleManualSelect(idx)}
+            className={`cursor-pointer transition-all duration-300 ${
+              idx === activeIndex ? "scale-110" : ""
+            }`}
+          >
+            {/* Small screen: only avatar */}
+            <div className="block md:hidden">
+              <img
+                src={member.image}
+                alt={member.name}
+                className={`w-12 h-12 rounded-full object-cover border- ${
+                  idx === activeIndex ? "border-purple-400" : "border-white/30"
+                }`}
+              />
+            </div>
+
+            {/* md+ screen: full info */}
+            <div
+              className={`hidden md:flex items-center gap-3 p-3 rounded-xl w-[240px] ${
+                idx === activeIndex
+                  ? "bg-white/20 border border-white/30"
+                  : "bg-white/10 hover:bg-white/20"
+              }`}
+            >
+              <img
+                src={member.image}
+                alt={member.name}
+                className="w-10 h-10 rounded-full object-cover border border-white"
+              />
+              <div>
+                <h4 className="text-sm font-semibold">{member.name}</h4>
+                <p className="text-xs text-purple-300">{member.position}</p>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
-    </section>
+    </motion.section>
   );
 }

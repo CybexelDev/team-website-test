@@ -8,7 +8,6 @@ import Contact from "./components/Contact";
 
 function App() {
   const [activeItem, setActiveItem] = useState(0);
-  const [isScrollLocked, setIsScrollLocked] = useState(false);
   const sectionRefs = useRef([]);
   const sectionIds = ["home", "services", "projects", "team", "contact"];
 
@@ -26,7 +25,7 @@ function App() {
           }
         }
       },
-      { threshold: 1 }
+      { threshold: 0.5 } // Use threshold: 0.6 or 0.5 for smoother active detection
     );
 
     sectionRefs.current.forEach((section) => {
@@ -41,11 +40,7 @@ function App() {
   }, []);
 
   return (
-    <div
-    className={`relative h-screen scroll-smooth scrollbar-hide ${
-  isScrollLocked ? "overflow-hidden" : "overflow-y-scroll"
-} md:snap-y md:snap-mandatory`} >
-
+    <div className=" md:pb-0 relative h-screen scroll-smooth scrollbar-hide overflow-y-scroll snap-y snap-mandatory">
       <Navbar activeItem={activeItem} setActiveItem={setActiveItem} />
 
       {sectionIds.map((id, index) => (
@@ -59,12 +54,7 @@ function App() {
             home: <Home />,
             services: <Services />,
             projects: <Projects />,
-            team: (
-              <Team
-                isActive={activeItem === index}
-                setIsScrollLocked={setIsScrollLocked}
-              />
-            ),
+            team: <Team />,
             contact: <Contact />,
           }[id]}
         </section>
